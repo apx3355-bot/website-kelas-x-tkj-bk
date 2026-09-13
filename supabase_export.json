@@ -1,0 +1,301 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "username": "developer",
+            "password": "$2y$12$fXolJ393\/rAMbQR0aFMY7OGXDy9knVXkpA3eZZwgnfoZIKCU6iET6",
+            "role": "developer",
+            "nama": "Developer Kelas"
+        },
+        {
+            "id": 190,
+            "username": "Zhe zhe",
+            "password": "$2b$10$DmgxcRQRv36shasyvd78ee1JKF7o1g7Jnf7EWaCNOC3LWzNZ\/2agK",
+            "role": "murid",
+            "nama": "Zhe zhe Prizilya Tenda"
+        },
+        {
+            "id": 191,
+            "username": "Clau_dya",
+            "password": "$2b$10$4SC9umNpZzX6C1tzfA2JRe2f6QfLYHrEhL37fudGBhMrN5E3\/uP3.",
+            "role": "murid",
+            "nama": "Jesinta Claudya Cindy.S"
+        },
+        {
+            "id": 192,
+            "username": "Marsella5547",
+            "password": "$2b$10$u6tUn9Oo9ZVEFsaXyh3Ak.0KwZR8pAzEQpHYYdzCcm.7qDpsfhtJC",
+            "role": "murid",
+            "nama": "Marsella putri"
+        },
+        {
+            "id": 193,
+            "username": "elichaa11",
+            "password": "$2b$10$F6RZJZ8nBMG67s0Up\/IuAOxpb5vKvMjPjh4x7wRcjiQf7vxythU5.",
+            "role": "murid",
+            "nama": "Elisa Marsiani"
+        },
+        {
+            "id": 194,
+            "username": "Callisto",
+            "password": "$2b$10$43AwoFeJuw9M9.akY.wOn.ituzagRRiWlr4KIfVqpwV1La57nv.Iu",
+            "role": "murid",
+            "nama": "Christian.Callisto.T"
+        },
+        {
+            "id": 195,
+            "username": "belaw",
+            "password": "$2b$10$d8KEG7LrhAvMbFuknmdvv.68W7HVCzGe5ZFcX9o4J.NWdNfkvvYFi",
+            "role": "murid",
+            "nama": "Gabriella Noveria Ruminggi"
+        },
+        {
+            "id": 196,
+            "username": "Moh. Fadhil",
+            "password": "$2b$10$4VWNbT13tpJHJPsVGlf0SeoCE5t\/r\/7YpDOVZ\/ssUgNhMdJ82.YjG",
+            "role": "wali_kelas",
+            "nama": "Mof. Fadhil"
+        },
+        {
+            "id": 197,
+            "username": "Ar_ya \u00d7 Lay",
+            "password": "$2b$10$7C4eCAZxAdEGi1R6ECgO4uDh.4rsJt3.uvjPI3HuMD6r7czT3UNz.",
+            "role": "murid",
+            "nama": "ARYA TRI ANUGERAH"
+        },
+        {
+            "id": 210,
+            "username": "Olivia",
+            "password": "$2b$10$wxEQ6gpxZFz0XnXV\/0\/mBO1G0eBIFJTYg9HV1Uoik5U51yP4Hbt\/G",
+            "role": "murid",
+            "nama": "Olivia"
+        },
+        {
+            "id": 211,
+            "username": "olviani",
+            "password": "$2b$10$0aZEyltD3co1gtSiO5aicu\/V2B6FYZITlEezWTn0VD07XPUX.7HNm",
+            "role": "murid",
+            "nama": "Olviani"
+        },
+        {
+            "id": 212,
+            "username": "IVAN",
+            "password": "$2b$10$\/pxMuy\/gG0NQ3oEmvWbHWepeTuYg7iQiR.rZjKwTWGqTVcVb5XOLO",
+            "role": "murid",
+            "nama": "Ivan Gabriel laepasa"
+        }
+    ],
+    "member_profiles": [
+        {
+            "id": 8,
+            "user_id": 1,
+            "nama_lengkap": "Marwan Ruagadi",
+            "kelas": "X TKJ",
+            "bio": "Developer",
+            "updated_at": "2026-09-06 13:05:33",
+            "photo_url": "\/uploads\/profiles\/profile-1-1788699933338.jpg",
+            "jabatan": ""
+        },
+        {
+            "id": 31,
+            "user_id": 190,
+            "nama_lengkap": "Zhe zhe Prizilya Tenda",
+            "kelas": "X TKJ 1",
+            "bio": "Test bio update",
+            "updated_at": "2026-09-12 13:37:23",
+            "photo_url": "\/uploads\/profiles\/profile-190-1788489405387.jpg",
+            "jabatan": "Anggota"
+        },
+        {
+            "id": 33,
+            "user_id": 191,
+            "nama_lengkap": "Jesinta Claudya Cindy.S",
+            "kelas": "X TKJ",
+            "bio": "ig@:Clau_dya",
+            "updated_at": "2026-09-06 15:46:59",
+            "photo_url": "\/uploads\/profiles\/profile-191-1788709619039.jpg",
+            "jabatan": ""
+        },
+        {
+            "id": 38,
+            "user_id": 192,
+            "nama_lengkap": "Marsella putri",
+            "kelas": "X TKJ",
+            "bio": "Istrinya taeyung",
+            "updated_at": "2026-09-08 02:21:43",
+            "photo_url": "\/uploads\/profiles\/profile-192-1788834103166.jpg",
+            "jabatan": ""
+        },
+        {
+            "id": 39,
+            "user_id": 193,
+            "nama_lengkap": "Elisa Marsiani",
+            "kelas": "X TKJ",
+            "bio": "Nalllongg",
+            "updated_at": "2026-09-12 13:40:41",
+            "photo_url": "\/uploads\/profiles\/profile-193-1788491070968.jpg",
+            "jabatan": ""
+        },
+        {
+            "id": 47,
+            "user_id": 194,
+            "nama_lengkap": "Christian.Callisto.T",
+            "kelas": "X TKJ",
+            "bio": "Neymar.jr",
+            "updated_at": "2026-09-12 13:40:38",
+            "photo_url": "\/uploads\/profiles\/profile-194-1788700993534.jpg",
+            "jabatan": ""
+        },
+        {
+            "id": 48,
+            "user_id": 195,
+            "nama_lengkap": "Gabriella Noveria Ruminggi",
+            "kelas": "X TKJ",
+            "bio": "begitu jo",
+            "updated_at": "2026-09-12 13:40:44",
+            "photo_url": "\/uploads\/profiles\/profile-195-1788491984501.jpg",
+            "jabatan": ""
+        },
+        {
+            "id": 55,
+            "user_id": 197,
+            "nama_lengkap": "ARYA TRI ANUGERAH",
+            "kelas": "X TKJ",
+            "bio": "JIKA KAMU MENULIS HAHA TANPA TERTAWA \nMAKA AKU JUGA BISA MENULIS CINTA TANPA RASA IZIN#\ud83d\ude4f",
+            "updated_at": "2026-09-12 13:40:29",
+            "photo_url": null,
+            "jabatan": ""
+        },
+        {
+            "id": 56,
+            "user_id": 196,
+            "nama_lengkap": "Mof. Fadhil",
+            "kelas": "X TKJ",
+            "bio": "Wali Kelas",
+            "updated_at": "2026-09-12 13:41:36",
+            "photo_url": "\/uploads\/profiles\/profile-196-1788494161033.jpg",
+            "jabatan": ""
+        },
+        {
+            "id": 62,
+            "user_id": 210,
+            "nama_lengkap": "Olivia",
+            "kelas": "X TKJ",
+            "bio": "",
+            "updated_at": "2026-09-06 15:36:40",
+            "photo_url": null,
+            "jabatan": ""
+        },
+        {
+            "id": 64,
+            "user_id": 211,
+            "nama_lengkap": "Olviani",
+            "kelas": "X TKJ",
+            "bio": "",
+            "updated_at": "2026-09-06 15:36:41",
+            "photo_url": null,
+            "jabatan": ""
+        },
+        {
+            "id": 66,
+            "user_id": 212,
+            "nama_lengkap": "Ivan Gabriel laepasa",
+            "kelas": "X TKJ",
+            "bio": "LEBIH BAIK MENGEJAR CITA CITA DARI PADA MENGEJAR CINTA YANG BELUM ADA KEPASTIAN",
+            "updated_at": "2026-09-06 15:36:34",
+            "photo_url": null,
+            "jabatan": ""
+        },
+        {
+            "id": 169,
+            "user_id": 2,
+            "nama_lengkap": "Wali Kelas",
+            "kelas": "X TKJ",
+            "bio": "Test",
+            "updated_at": "2026-09-12 13:01:04",
+            "photo_url": null,
+            "jabatan": "Wali Kelas"
+        }
+    ],
+    "class_schedule": [
+        {
+            "id": 1,
+            "day": "Senin",
+            "subjects": "Bhs. indo \u2022 Sejarah \u2022 PPKN"
+        },
+        {
+            "id": 2,
+            "day": "Selasa",
+            "subjects": "Bahasa Inggris \u2022 Kejuruan TKJ"
+        },
+        {
+            "id": 3,
+            "day": "Rabu",
+            "subjects": "Coding \u2022 IPAS"
+        },
+        {
+            "id": 4,
+            "day": "Kamis",
+            "subjects": "Agama \u2022 PJOK \u2022 Seni Budaya"
+        },
+        {
+            "id": 5,
+            "day": "Jumat",
+            "subjects": "Kejuruan TKJ \u2022 Muatan lokal"
+        },
+        {
+            "id": 6,
+            "day": "Sabtu",
+            "subjects": "Informatika \u2022 Matematika"
+        }
+    ],
+    "class_info": [
+        {
+            "id": 1,
+            "title": "Satu Kelas, Satu Tim",
+            "content": "Website ini dibuat sebagai pusat informasi digital KELAS X TKJ.",
+            "updated_at": "2026-09-04 03:04:56"
+        }
+    ],
+    "class_structure": [
+        {
+            "position": "wali_kelas",
+            "user_id": 196,
+            "updated_at": "2026-09-04 19:09:23"
+        },
+        {
+            "position": "ketua",
+            "user_id": 194,
+            "updated_at": "2026-09-04 19:09:23"
+        },
+        {
+            "position": "wakil",
+            "user_id": 192,
+            "updated_at": "2026-09-04 19:09:23"
+        },
+        {
+            "position": "sekretaris",
+            "user_id": 191,
+            "updated_at": "2026-09-04 19:09:23"
+        }
+    ],
+    "class_gallery": [
+        {
+            "id": 7,
+            "title": "foto bersama",
+            "description": "",
+            "photo_url": "\/uploads\/gallery\/gallery-1788693091690-270684269.jpg",
+            "uploaded_by": 1,
+            "created_at": "2026-09-06 11:11:31"
+        },
+        {
+            "id": 8,
+            "title": "random",
+            "description": "",
+            "photo_url": "\/uploads\/gallery\/gallery-1788709073892-620435659.jpg",
+            "uploaded_by": 1,
+            "created_at": "2026-09-06 15:37:53"
+        }
+    ],
+    "announcements": []
+}

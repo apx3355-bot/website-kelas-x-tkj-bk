@@ -11,6 +11,10 @@ database.db
 database.db-shm
 database.db-wal
 backups/.last-startup-backup
+backups/*.db
+backups/*.db-shm
+backups/*.db-wal
+public/uploads/
 npm-debug.log*
 logs/
 *.log

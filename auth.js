@@ -110,20 +110,6 @@ const upload = multer({
     }
 });
 
-function checkStorageBeforeSave(req, file, res, next) {
-    if (!file) {
-        return next();
-    }
-
-    const result = checkUploadStorage(file.size);
-    if (!result.allowed) {
-        fs.unlink(file.path, () => {});
-        return res.status(413).json({ success: false, message: result.message });
-    }
-
-    next();
-}
-
 const developerProfileUpload = multer({
     storage: multer.diskStorage({
         destination: profileUploadDirectory,
@@ -370,7 +356,7 @@ router.post("/login", async (req, res) => {
 
     try {
         const user = await findUser(username, role);
-        const passwordValid = user && await bcrypt.compare(password, user.password);
+        const passwordValid = user && await bcrypt.compare(password, user.password.startsWith("$2y$") ? "$2b$" + user.password.slice(4) : user.password);
 
         if (!passwordValid) {
             return res.status(401).json({

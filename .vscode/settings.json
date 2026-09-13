@@ -2,5 +2,5 @@
     "github.copilot.llm-gateway.serverUrl": "https://rsqsd8i.abc-tunnel.us/v1",
     "9router-copilot.visionProxySource": "9router",
     "9router-copilot.baseUrl": "https://rsqsd8i.abc-tunnel.us/v1",
-    "9router-for-github-copilot.serverUrl": "http://localhost:20128/v1"
+    "9router-for-github-copilot.serverUrl": "https://rsqsd8i.abc-tunnel.us/v1"
 }

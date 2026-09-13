@@ -623,7 +623,8 @@ try {
         $class = trim((string)($data['kelas'] ?? ''));
         $job = trim((string)($data['jabatan'] ?? ''));
         $bio = trim((string)($data['bio'] ?? ''));
-        if ($name === '' || $class === '' || mb_strlen($job) > 80) respond(['success' => false, 'message' => 'Nama dan kelas wajib diisi'], 400);
+        if ($name === '' || $class === '') respond(['success' => false, 'message' => 'Nama dan kelas wajib diisi'], 400);
+        if (strlen($job) > 80) respond(['success' => false, 'message' => 'Jabatan terlalu panjang'], 400);
         $check = $db->prepare("SELECT id, nama FROM users WHERE id = ? AND role IN ('murid', 'wali_kelas')");
         $check->execute([$memberId]);
         $member = $check->fetch(PDO::FETCH_ASSOC);
@@ -652,6 +653,13 @@ try {
 
     respond(['success' => false, 'message' => 'Route tidak ditemukan'], 404);
 } catch (Throwable $error) {
-    error_log($error->getMessage());
-    respond(['success' => false, 'message' => 'Terjadi kesalahan pada server'], 500);
+    error_log($error->getMessage() . ' in ' . $error->getFile() . ':' . $error->getLine());
+    error_log($error->getTraceAsString());
+    $devMode = getenv('APP_ENV') !== 'production';
+    respond([
+        'success' => false,
+        'message' => 'Terjadi kesalahan pada server',
+        'error' => $devMode ? $error->getMessage() : null,
+        'trace' => $devMode ? $error->getTraceAsString() : null
+    ], 500);
 }
