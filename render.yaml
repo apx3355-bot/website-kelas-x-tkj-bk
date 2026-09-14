@@ -1,14 +1,18 @@
 services:
   - type: web
-    name: kelas-x-tkj
+    name: website-kelas-x-tkj-bk
     env: docker
-    plan: free
+    plan: starter
+    disk:
+      name: kelas-data
+      mountPath: /data
+      sizeGB: 1
     envVars:
       - key: PORT
         value: 10000
       - key: DB_PATH
-        value: /var/www/html/database.db
+        value: /data/database.db
       - key: UPLOAD_PATH
-        value: /var/www/html/public/uploads
+        value: /data/uploads
       - key: BACKUP_PATH
-        value: /var/www/html/backups
+        value: /data/backups

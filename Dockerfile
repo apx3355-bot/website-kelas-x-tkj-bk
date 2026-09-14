@@ -34,4 +34,4 @@ RUN mkdir -p /data/uploads /data/backups /var/www/html/public/uploads \
 EXPOSE 10000
 
 # Start PHP built-in server with router
-CMD ["sh", "-c", "php -S 0.0.0.0:${PORT} -t public backend/router.php"]
+CMD ["sh", "-c", "mkdir -p /data/uploads /data/backups && [ -f /data/database.db ] || cp database.db /data/database.db; php -S 0.0.0.0:${PORT} -t public backend/router.php"]
