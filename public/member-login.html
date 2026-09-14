@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk Anggota | KELAS X TKJ</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="login-page">
+        <div class="section-title">
+            <p>KELAS X TKJ</p>
+            <h2>Masuk sebagai Anggota</h2>
+        </div>
+        <form id="member-login-form" class="login-form">
+            <input type="hidden" name="role" value="murid">
+
+            <label for="member-username">Username anggota</label>
+            <input id="member-username" name="username" type="text" autocomplete="username" required>
+
+            <label for="member-password">Password</label>
+            <div class="password-field">
+                <input id="member-password" name="password" type="password" autocomplete="current-password" required>
+                <button class="password-toggle" type="button" aria-label="Tampilkan password">Lihat</button>
+            </div>
+
+            <p class="login-hint">Gunakan akun anggota yang sudah terdaftar.</p>
+            <p id="member-login-message" class="form-message" role="alert" aria-live="polite"></p>
+            <button type="submit" class="primary-btn login-submit">Masuk</button>
+        </form>
+        <button id="show-register-button" class="secondary-btn login-register-toggle" type="button">Daftar sebagai anggota</button>
+        <form id="member-register-form" class="login-form member-register-form" hidden>
+            <p id="member-quota-message" class="login-hint" role="status" aria-live="polite"></p>
+            <label for="member-name">Nama lengkap</label>
+            <input id="member-name" name="nama" type="text" required>
+
+            <label for="register-username">Username</label>
+            <input id="register-username" name="username" type="text" autocomplete="username" required>
+
+            <label for="register-password">Password</label>
+            <div class="password-field">
+                <input id="register-password" name="password" type="password" minlength="6" autocomplete="new-password" required>
+                <button class="password-toggle" type="button" aria-label="Tampilkan password">Lihat</button>
+            </div>
+
+            <label for="member-class">Kelas</label>
+            <input id="member-class" name="kelas" type="text" value="X TKJ" required>
+
+            <label for="member-bio">Bio</label>
+            <textarea id="member-bio" name="bio" rows="3" placeholder="Ceritakan sedikit tentang diri Anda"></textarea>
+
+            <p id="member-register-message" class="form-message" role="alert" aria-live="polite"></p>
+            <button type="submit" class="primary-btn login-submit">Simpan dan daftar</button>
+        </form>
+        <p class="login-back"><a href="login.html" class="secondary-btn">Login role lain</a></p>
+        <p class="login-back"><a href="/" class="secondary-btn">Kembali ke beranda</a></p>
+    </main>
+    <script>
+        const memberLoginForm = document.getElementById("member-login-form");
+        const memberLoginMessage = document.getElementById("member-login-message");
+        const memberLoginButton = memberLoginForm.querySelector("button[type=\"submit\"]");
+        const showRegisterButton = document.getElementById("show-register-button");
+        const memberRegisterForm = document.getElementById("member-register-form");
+        const memberRegisterMessage = document.getElementById("member-register-message");
+        const memberRegisterButton = memberRegisterForm.querySelector("button[type=\"submit\"]");
+        const memberQuotaMessage = document.getElementById("member-quota-message");
+
+        document.querySelectorAll(".password-toggle").forEach((toggle) => {
+            toggle.addEventListener("click", () => {
+                const passwordInput = toggle.parentElement.querySelector("input");
+                const showingPassword = passwordInput.type === "text";
+                passwordInput.type = showingPassword ? "password" : "text";
+                toggle.textContent = showingPassword ? "Lihat" : "Sembunyikan";
+                toggle.setAttribute("aria-label", showingPassword ? "Tampilkan password" : "Sembunyikan password");
+            });
+        });
+
+        showRegisterButton.addEventListener("click", () => {
+            memberRegisterForm.hidden = !memberRegisterForm.hidden;
+            showRegisterButton.textContent = memberRegisterForm.hidden ? "Daftar sebagai anggota" : "Tutup pendaftaran";
+        });
+
+        async function loadMemberQuota() {
+            try {
+                const response = await fetch("/api/auth/member-registration-status");
+                const result = await response.json();
+                if (!response.ok || !result.success) return;
+
+                memberQuotaMessage.textContent = result.available
+                    ? `Kuota anggota: ${result.count}/${result.max}`
+                    : "Kuota 30 anggota sudah penuh. Anda tetap dapat melihat info kelas dan galeri sebagai pengunjung.";
+                if (!result.available) {
+                    memberRegisterButton.disabled = true;
+                    memberQuotaMessage.classList.add("quota-full");
+                }
+            } catch (error) {
+                memberQuotaMessage.textContent = "Status kuota belum dapat dimuat.";
+            }
+        }
+
+        memberLoginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            memberLoginMessage.textContent = "";
+            memberLoginButton.disabled = true;
+            memberLoginButton.textContent = "Memproses...";
+
+            try {
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "same-origin",
+                    body: JSON.stringify(Object.fromEntries(new FormData(memberLoginForm).entries()))
+                });
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || "Login anggota gagal");
+                }
+
+                window.location.href = "/";
+            } catch (error) {
+                memberLoginMessage.textContent = error.message;
+                memberLoginButton.disabled = false;
+                memberLoginButton.textContent = "Masuk";
+            }
+        });
+
+        memberRegisterForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            memberRegisterMessage.textContent = "";
+            memberRegisterButton.disabled = true;
+            memberRegisterButton.textContent = "Menyimpan...";
+
+            try {
+                const response = await fetch("/api/auth/member-register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(Object.fromEntries(new FormData(memberRegisterForm).entries()))
+                });
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || "Pendaftaran anggota gagal");
+                }
+
+                memberLoginForm.elements.username.value = memberRegisterForm.elements.username.value;
+                memberRegisterForm.reset();
+                memberRegisterForm.hidden = true;
+                showRegisterButton.textContent = "Daftar sebagai anggota";
+                memberLoginMessage.textContent = result.message + ". Silakan masuk.";
+            } catch (error) {
+                memberRegisterMessage.textContent = error.message;
+            } finally {
+                memberRegisterButton.disabled = false;
+                memberRegisterButton.textContent = "Simpan dan daftar";
+            }
+        });
+
+        loadMemberQuota();
+    </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Kelas | KELAS X TKJ</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="gallery-page">
+        <header class="gallery-page-header">
+            <div>
+                <p class="badge">KENANGAN KELAS</p>
+                <h1>Galeri Kelas</h1>
+                <p>Dokumentasi kegiatan dan momen kebersamaan KELAS X TKJ.</p>
+            </div>
+            <a href="index.html" class="secondary-btn">Kembali</a>
+        </header>
+
+        <section class="dashboard-panel gallery-panel">
+            <div class="gallery-heading">
+                <div>
+                    <p class="panel-label">DOKUMENTASI</p>
+                    <h2>Foto Kegiatan</h2>
+                </div>
+                <button id="gallery-add-toggle" class="primary-btn" type="button" hidden>Tambah foto</button>
+            </div>
+
+            <form id="gallery-form" class="gallery-form" hidden>
+                <label for="gallery-title">Judul foto</label>
+                <input id="gallery-title" name="title" type="text" placeholder="Contoh: Kegiatan kelas" required>
+                <label for="gallery-description">Keterangan</label>
+                <textarea id="gallery-description" name="description" rows="3" placeholder="Keterangan singkat (opsional)"></textarea>
+                <label for="gallery-photo">Pilih foto</label>
+                <input id="gallery-photo" name="foto" type="file" accept="image/jpeg,image/png,image/webp" required>
+                <p id="gallery-message" class="form-message" role="alert" aria-live="polite"></p>
+                <button type="submit" class="primary-btn profile-submit">Simpan ke galeri</button>
+            </form>
+
+            <div id="gallery-grid" class="gallery-grid"></div>
+            <p id="gallery-empty" class="muted-text" hidden>Belum ada foto di galeri.</p>
+            <p id="gallery-error" class="form-message" role="alert" aria-live="polite"></p>
+        </section>
+    </main>
+    <div id="photo-lightbox" class="photo-lightbox" hidden>
+        <button id="photo-lightbox-close" class="photo-lightbox-close" type="button" aria-label="Tutup foto">&times;</button>
+        <img id="photo-lightbox-image" src="" alt="">
+    </div>
+    <script>
+        const galleryAddToggle = document.getElementById("gallery-add-toggle");
+        const galleryForm = document.getElementById("gallery-form");
+        const galleryGrid = document.getElementById("gallery-grid");
+        const galleryEmpty = document.getElementById("gallery-empty");
+        const galleryMessage = document.getElementById("gallery-message");
+        const galleryError = document.getElementById("gallery-error");
+        const photoLightbox = document.getElementById("photo-lightbox");
+        const photoLightboxImage = document.getElementById("photo-lightbox-image");
+        const photoLightboxClose = document.getElementById("photo-lightbox-close");
+
+        function closeLightbox() {
+            photoLightbox.hidden = true;
+            photoLightboxImage.src = "";
+            document.body.classList.remove("lightbox-open");
+        }
+
+        galleryGrid.addEventListener("click", (event) => {
+            if (event.target.tagName !== "IMG") return;
+            photoLightboxImage.src = event.target.src;
+            photoLightboxImage.alt = event.target.alt;
+            photoLightbox.hidden = false;
+            document.body.classList.add("lightbox-open");
+        });
+
+        photoLightboxClose.addEventListener("click", closeLightbox);
+        photoLightbox.addEventListener("click", (event) => {
+            if (event.target === photoLightbox) closeLightbox();
+        });
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") closeLightbox();
+        });
+
+        async function loadGallery() {
+            try {
+                const response = await fetch("/api/auth/gallery", { credentials: "same-origin" });
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || "Galeri tidak dapat dimuat");
+                }
+
+                if (!result.canManage) {
+                    galleryAddToggle.remove();
+                    galleryForm.remove();
+                    galleryMessage.remove();
+                }
+                galleryGrid.replaceChildren(...result.photos.map((photo) => {
+                    const card = document.createElement("article");
+                    card.className = "gallery-card";
+                    card.innerHTML = `<img src="${photo.photo_url}" alt=""><div class="gallery-card-body"><h3></h3><p></p><small></small></div>`;
+                    card.querySelector("h3").textContent = photo.title;
+                    card.querySelector("p").textContent = photo.description;
+                    card.querySelector("small").textContent = `Diunggah oleh ${photo.uploaded_by_name}`;
+                    return card;
+                }));
+                galleryEmpty.hidden = result.photos.length > 0;
+            } catch (error) {
+                galleryError.textContent = error.message;
+            }
+        }
+
+        galleryAddToggle.addEventListener("click", () => {
+            galleryForm.hidden = !galleryForm.hidden;
+        });
+
+        galleryForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            galleryMessage.textContent = "";
+            const response = await fetch("/api/auth/gallery", {
+                method: "POST",
+                credentials: "same-origin",
+                body: new FormData(galleryForm)
+            });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                galleryMessage.textContent = result.message || "Foto gagal ditambahkan";
+                return;
+            }
+            galleryForm.reset();
+            galleryForm.hidden = true;
+            galleryMessage.textContent = result.message;
+            await loadGallery();
+        });
+
+        loadGallery();
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anggota Kelas | KELAS X TKJ</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="members-page">
+        <header class="members-page-header">
+            <div>
+                <p class="badge">KELAS X TKJ</p>
+                <h1>Anggota Kelas</h1>
+                <p>Kenali seluruh anggota KELAS X TKJ.</p>
+            </div>
+            <a href="index.html#struktur" class="secondary-btn">Kembali</a>
+        </header>
+
+        <section class="dashboard-panel">
+            <div id="members-list" class="members-list"></div>
+            <p id="members-empty" class="muted-text" hidden>Belum ada data anggota kelas.</p>
+            <p id="members-error" class="form-message" role="alert" aria-live="polite"></p>
+        </section>
+    </main>
+    <script>
+        const membersList = document.getElementById("members-list");
+        const membersEmpty = document.getElementById("members-empty");
+        const membersError = document.getElementById("members-error");
+        const roleLabels = {
+            developer: "Developer",
+            wali_kelas: "Wali Kelas",
+            murid: "Murid"
+        };
+
+        async function loadMembers() {
+            try {
+                const response = await fetch("/api/auth/members");
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || "Data anggota tidak dapat dimuat");
+                }
+
+                membersList.replaceChildren(...result.members.map((member) => {
+                    const card = document.createElement("article");
+                    card.className = "member-card";
+                    const name = member.nama_lengkap || member.account_name;
+                    const avatar = document.createElement("div");
+                    avatar.className = "avatar";
+                    avatar.textContent = name.charAt(0).toUpperCase();
+                    if (member.photo_url) {
+                        const photo = document.createElement("img");
+                        photo.className = "member-photo";
+                        photo.src = member.photo_url;
+                        photo.alt = `Foto ${name}`;
+                        avatar.replaceChildren(photo);
+                    }
+                    card.append(avatar);
+                    const heading = document.createElement("h2");
+                    heading.textContent = name;
+                    card.append(heading);
+                    const role = document.createElement("p");
+                    role.textContent = member.jabatan || roleLabels[member.role] || "Anggota Kelas";
+                    card.append(role);
+                    const className = document.createElement("p");
+                    className.className = "member-class";
+                    className.textContent = member.kelas || "X TKJ";
+                    card.append(className);
+                    const bio = document.createElement("p");
+                    bio.className = "member-bio";
+                    bio.textContent = member.bio || "Belum ada bio.";
+                    card.append(bio);
+                    return card;
+                }));
+                membersEmpty.hidden = result.members.length > 0;
+            } catch (error) {
+                membersError.textContent = error.message;
+            }
+        }
+
+        loadMembers();
+    </script>
+</body>
+</html>

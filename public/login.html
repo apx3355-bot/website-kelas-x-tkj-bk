@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | KELAS X TKJ</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="login-page">
+        <div class="section-title">
+            <p>KELAS X TKJ SYSTEM</p>
+            <h2>Login</h2>
+        </div>
+        <form id="login-form" class="login-form">
+            <label for="role">Masuk sebagai</label>
+            <select id="role" name="role" required>
+                <option value="">Pilih role</option>
+                <option value="developer">Developer</option>
+                <option value="wali_kelas">Wali Kelas</option>
+                <option value="murid">Murid</option>
+            </select>
+
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" autocomplete="username" required>
+
+            <label for="password">Password</label>
+            <div class="password-field">
+                <input id="password" name="password" type="password" autocomplete="current-password" required>
+                <button class="password-toggle" type="button" aria-label="Tampilkan password">Lihat</button>
+            </div>
+
+            <p id="login-message" class="form-message" role="alert" aria-live="polite"></p>
+            <button type="submit" class="primary-btn login-submit">Login</button>
+        </form>
+        <p class="login-back"><a href="/" class="secondary-btn">Kembali ke beranda</a></p>
+    </main>
+    <script>
+        const loginForm = document.getElementById("login-form");
+        const loginMessage = document.getElementById("login-message");
+        const loginButton = loginForm.querySelector("button[type=\"submit\"]");
+
+        loginForm.querySelectorAll(".password-toggle").forEach((toggle) => {
+            toggle.addEventListener("click", () => {
+                const passwordInput = toggle.parentElement.querySelector("input");
+                const showingPassword = passwordInput.type === "text";
+                passwordInput.type = showingPassword ? "password" : "text";
+                toggle.textContent = showingPassword ? "Lihat" : "Sembunyikan";
+                toggle.setAttribute("aria-label", showingPassword ? "Tampilkan password" : "Sembunyikan password");
+            });
+        });
+
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            loginMessage.textContent = "";
+            loginButton.disabled = true;
+            loginButton.textContent = "Memproses...";
+
+            const formData = new FormData(loginForm);
+            const credentials = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "same-origin",
+                    body: JSON.stringify(credentials)
+                });
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || "Login gagal");
+                }
+
+                window.location.href = "/";
+            } catch (error) {
+                loginMessage.textContent = error.message;
+                loginButton.disabled = false;
+                loginButton.textContent = "Login";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | KELAS X TKJ</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="dashboard-page">
+        <header class="dashboard-header">
+            <div>
+                <p class="badge">KELAS X TKJ</p>
+                <h1 id="dashboard-title">Dashboard</h1>
+                <p id="dashboard-subtitle" class="dashboard-subtitle">Memuat data akun...</p>
+            </div>
+            <div class="dashboard-actions">
+                <a href="/" class="secondary-btn">Kembali ke Beranda</a>
+                <button id="logout-button" class="secondary-btn" type="button">Keluar</button>
+            </div>
+        </header>
+
+        <section class="dashboard-content" aria-live="polite">
+            <div class="dashboard-panel">
+                <p class="panel-label">AKUN AKTIF</p>
+                <h2 id="user-name">-</h2>
+                <p id="user-username" class="muted-text">-</p>
+                <span id="user-role" class="role-badge">-</span>
+            </div>
+            <div class="dashboard-panel">
+                <p class="panel-label">AKSES ROLE</p>
+                <ul id="permission-list" class="permission-list"></ul>
+            </div>
+            <div id="announcement-tools" class="dashboard-panel announcement-tools" hidden>
+                <p class="panel-label">INFORMASI KELAS</p>
+                <h2>Pengumuman kelas</h2>
+                <form id="announcement-form" class="announcement-form">
+                    <label for="announcement-title">Judul</label>
+                    <input id="announcement-title" name="title" type="text" required>
+                    <label for="announcement-content">Isi pengumuman</label>
+                    <textarea id="announcement-content" name="content" rows="4" required></textarea>
+                    <label for="announcement-poster">Poster pengumuman (opsional)</label>
+                    <input id="announcement-poster" name="poster" type="file" accept="image/jpeg,image/png,image/webp">
+                    <label for="announcement-duration">Durasi tampil</label>
+                    <select id="announcement-duration" name="duration" required>
+                        <option value="1">1 hari</option>
+                        <option value="3">3 hari</option>
+                        <option value="7" selected>7 hari</option>
+                        <option value="30">30 hari</option>
+                        <option value="permanent">Sampai diubah manual</option>
+                    </select>
+                    <p id="announcement-message" class="form-message" role="alert" aria-live="polite"></p>
+                    <button type="submit" class="primary-btn profile-submit">Tambah pengumuman</button>
+                </form>
+                <div id="announcement-list" class="announcement-list"></div>
+            </div>
+            <div id="class-content-tools" class="dashboard-panel class-content-tools" hidden>
+                <p class="panel-label">KONTEN KELAS</p>
+                <h2>Info dan jadwal kelas</h2>
+                <form id="class-content-form" class="announcement-form">
+                    <label for="class-info-title">Judul info kelas</label>
+                    <input id="class-info-title" name="title" type="text" required>
+                    <label for="class-info-content">Info kelas</label>
+                    <textarea id="class-info-content" name="content" rows="4" required></textarea>
+                    <div id="schedule-editor" class="schedule-editor"></div>
+                    <p id="class-content-message" class="form-message" role="alert" aria-live="polite"></p>
+                    <button type="submit" class="primary-btn profile-submit">Simpan info dan jadwal</button>
+                </form>
+            </div>
+            <div id="developer-tools" class="dashboard-panel developer-tools" hidden>
+                <p class="panel-label">ALAT DEVELOPER</p>
+                <h2>Anggota dan sesi login</h2>
+                <p class="muted-text">Atur profil dan label jabatan anggota kelas.</p>
+                <div id="developer-members-list" class="developer-members-list"></div>
+                <p id="developer-tools-message" class="form-message" role="alert" aria-live="polite"></p>
+            </div>
+            <div id="profile-panel" class="dashboard-panel profile-panel" hidden>
+                <p class="panel-label">PROFIL KELAS</p>
+                <form id="profile-form" class="profile-form">
+                    <img id="profile-photo-preview" class="profile-photo" alt="Foto profil" hidden>
+                    <label for="profile-photo">Foto profil</label>
+                    <input id="profile-photo" name="foto" type="file" accept="image/jpeg,image/png,image/webp">
+                    <div id="profile-cropper" class="profile-cropper" hidden>
+                        <p class="cropper-label">Sesuaikan foto</p>
+                        <canvas id="profile-crop-canvas" width="240" height="240" aria-label="Pratinjau crop foto profil"></canvas>
+                        <label for="profile-crop-zoom">Perbesar foto</label>
+                        <input id="profile-crop-zoom" type="range" min="1" max="3" step="0.01" value="1">
+                        <div class="cropper-actions">
+                            <button id="profile-crop-cancel" class="secondary-btn" type="button">Batal</button>
+                            <button id="profile-crop-apply" class="primary-btn" type="button">Gunakan foto</button>
+                        </div>
+                    </div>
+
+                    <label for="profile-name">Nama lengkap</label>
+                    <input id="profile-name" name="nama_lengkap" type="text" required>
+
+                    <label for="profile-class">Kelas</label>
+                    <input id="profile-class" name="kelas" type="text" required>
+
+                    <label for="profile-bio">Tentang saya</label>
+                    <textarea id="profile-bio" name="bio" rows="4" placeholder="Tulis deskripsi singkat"></textarea>
+
+                    <p id="profile-message" class="form-message" role="alert" aria-live="polite"></p>
+                    <button type="submit" class="primary-btn profile-submit">Simpan profil</button>
+                </form>
+            </div>
+            <div class="dashboard-panel gallery-panel">
+                <div class="gallery-heading">
+                    <div>
+                        <p class="panel-label">KENANGAN KELAS</p>
+                        <h2>Galeri Kelas</h2>
+                    </div>
+                    <button id="gallery-add-toggle" class="primary-btn" type="button" hidden>Tambah foto</button>
+                </div>
+                <form id="gallery-form" class="gallery-form" hidden>
+                    <label for="gallery-title">Judul foto</label>
+                    <input id="gallery-title" name="title" type="text" placeholder="Contoh: Kegiatan kelas" required>
+                    <label for="gallery-description">Keterangan</label>
+                    <textarea id="gallery-description" name="description" rows="3" placeholder="Keterangan singkat (opsional)"></textarea>
+                    <label for="gallery-photo">Pilih foto</label>
+                    <input id="gallery-photo" name="foto" type="file" accept="image/jpeg,image/png,image/webp" required>
+                    <p id="gallery-message" class="form-message" role="alert" aria-live="polite"></p>
+                    <button type="submit" class="primary-btn profile-submit">Simpan ke galeri</button>
+                </form>
+                <div id="gallery-grid" class="gallery-grid"></div>
+                <p id="gallery-empty" class="muted-text" hidden>Belum ada foto di galeri.</p>
+            </div>
+        </section>
+        <p id="dashboard-message" class="form-message" role="alert"></p>
+    </main>
+    <div id="photo-lightbox" class="photo-lightbox" hidden>
+        <button id="photo-lightbox-close" class="photo-lightbox-close" type="button" aria-label="Tutup foto">&times;</button>
+        <img id="photo-lightbox-image" src="" alt="">
+    </div>
+    <script>
+        const title = document.getElementById("dashboard-title");
+        const subtitle = document.getElementById("dashboard-subtitle");
+        const userName = document.getElementById("user-name");
+        const userUsername = document.getElementById("user-username");
+        const userRole = document.getElementById("user-role");
+        const permissionList = document.getElementById("permission-list");
+        const dashboardMessage = document.getElementById("dashboard-message");
+        const developerTools = document.getElementById("developer-tools");
+        const developerMembersList = document.getElementById("developer-members-list");
+        const developerToolsMessage = document.getElementById("developer-tools-message");
+        const announcementTools = document.getElementById("announcement-tools");
+        const announcementForm = document.getElementById("announcement-form");
+        const announcementMessage = document.getElementById("announcement-message");
+        const announcementList = document.getElementById("announcement-list");
+        const classContentTools = document.getElementById("class-content-tools");
+        const classContentForm = document.getElementById("class-content-form");
+        const scheduleEditor = document.getElementById("schedule-editor");
+        const classContentMessage = document.getElementById("class-content-message");
+        const logoutButton = document.getElementById("logout-button");
+        const profilePanel = document.getElementById("profile-panel");
+        const profileForm = document.getElementById("profile-form");
+        const profileMessage = document.getElementById("profile-message");
+        const profilePhoto = document.getElementById("profile-photo");
+        const profilePhotoPreview = document.getElementById("profile-photo-preview");
+        const profileCropper = document.getElementById("profile-cropper");
+        const profileCropCanvas = document.getElementById("profile-crop-canvas");
+        const profileCropZoom = document.getElementById("profile-crop-zoom");
+        const profileCropCancel = document.getElementById("profile-crop-cancel");
+        const profileCropApply = document.getElementById("profile-crop-apply");
+        const galleryAddToggle = document.getElementById("gallery-add-toggle");
+        const galleryForm = document.getElementById("gallery-form");
+        const galleryGrid = document.getElementById("gallery-grid");
+        const galleryEmpty = document.getElementById("gallery-empty");
+        const galleryMessage = document.getElementById("gallery-message");
+        const photoLightbox = document.getElementById("photo-lightbox");
+        const photoLightboxImage = document.getElementById("photo-lightbox-image");
+        const photoLightboxClose = document.getElementById("photo-lightbox-close");
+
+        function closeLightbox() {
+            photoLightbox.hidden = true;
+            photoLightboxImage.src = "";
+            document.body.classList.remove("lightbox-open");
+        }
+
+        galleryGrid.addEventListener("click", (event) => {
+            if (event.target.tagName !== "IMG") return;
+            photoLightboxImage.src = event.target.src;
+            photoLightboxImage.alt = event.target.alt;
+            photoLightbox.hidden = false;
+            document.body.classList.add("lightbox-open");
+        });
+
+        photoLightboxClose.addEventListener("click", closeLightbox);
+        photoLightbox.addEventListener("click", (event) => {
+            if (event.target === photoLightbox) closeLightbox();
+        });
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") closeLightbox();
+        });
+
+        const roleLabels = {
+            developer: "Developer",
+            wali_kelas: "Wali Kelas",
+            murid: "Murid"
+        };
+
+        let cropImage = null;
+        let cropOffsetX = 0;
+        let cropOffsetY = 0;
+        let cropStartX = 0;
+        let cropStartY = 0;
+        let croppedPhoto = null;
+        let currentUserRole = null;
+
+        function drawCropPreview() {
+            if (!cropImage) return;
+            const context = profileCropCanvas.getContext("2d");
+            const canvasSize = profileCropCanvas.width;
+            const scale = Math.max(canvasSize / cropImage.width, canvasSize / cropImage.height) * Number(profileCropZoom.value);
+            const width = cropImage.width * scale;
+            const height = cropImage.height * scale;
+            context.clearRect(0, 0, canvasSize, canvasSize);
+            context.fillStyle = "#08090d";
+            context.fillRect(0, 0, canvasSize, canvasSize);
+            context.drawImage(cropImage, cropOffsetX, cropOffsetY, width, height);
+        }
+
+        function resetCropPosition() {
+            const scale = Math.max(profileCropCanvas.width / cropImage.width, profileCropCanvas.height / cropImage.height);
+            cropOffsetX = (profileCropCanvas.width - cropImage.width * scale) / 2;
+            cropOffsetY = (profileCropCanvas.height - cropImage.height * scale) / 2;
+            drawCropPreview();
+        }
+
+        profilePhoto.addEventListener("change", () => {
+            const file = profilePhoto.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                cropImage = new Image();
+                cropImage.onload = () => {
+                    profileCropZoom.value = "1";
+                    resetCropPosition();
+                    profileCropper.hidden = false;
+                };
+                cropImage.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        profileCropZoom.addEventListener("input", drawCropPreview);
+
+        profileCropCanvas.addEventListener("pointerdown", (event) => {
+            profileCropCanvas.setPointerCapture(event.pointerId);
+            cropStartX = event.clientX - cropOffsetX;
+            cropStartY = event.clientY - cropOffsetY;
+        });
+
+        profileCropCanvas.addEventListener("pointermove", (event) => {
+            if (!profileCropCanvas.hasPointerCapture(event.pointerId)) return;
+            cropOffsetX = event.clientX - cropStartX;
+            cropOffsetY = event.clientY - cropStartY;
+            drawCropPreview();
+        });
+
+        profileCropCancel.addEventListener("click", () => {
+            profilePhoto.value = "";
+            cropImage = null;
+            croppedPhoto = null;
+            profileCropper.hidden = true;
+        });
+
+        profileCropApply.addEventListener("click", () => {
+            profileCropCanvas.toBlob((blob) => {
+                croppedPhoto = new File([blob], "profile-cropped.jpg", { type: "image/jpeg" });
+                profilePhotoPreview.src = URL.createObjectURL(croppedPhoto);
+                profilePhotoPreview.hidden = false;
+                profileCropper.hidden = true;
+            }, "image/jpeg", 0.9);
+        });
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch("/api/auth/dashboard", { credentials: "same-origin" });
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    window.location.href = "/login.html";
+                    return;
+                }
+
+                currentUserRole = result.user.role;
+
+                const roleLabel = roleLabels[result.user.role] || result.user.role;
+                title.textContent = `Dashboard ${roleLabel}`;
+                subtitle.textContent = `Selamat datang, ${result.user.nama}`;
+                userName.textContent = result.user.nama;
+                userUsername.textContent = `@${result.user.username}`;
+                userRole.textContent = roleLabel;
+                permissionList.replaceChildren(...result.permissions.map((permission) => {
+                    const item = document.createElement("li");
+                    item.textContent = permission;
+                    return item;
+                }));
+
+                if (["developer", "wali_kelas", "murid"].includes(result.user.role)) {
+                    profilePanel.hidden = false;
+                    const profileResponse = await fetch("/api/auth/profile", { credentials: "same-origin" });
+                    const profileResult = await profileResponse.json();
+                    if (profileResponse.ok && profileResult.profile) {
+                        profileForm.elements.nama_lengkap.value = profileResult.profile.nama_lengkap;
+                        profileForm.elements.kelas.value = profileResult.profile.kelas;
+                        profileForm.elements.bio.value = profileResult.profile.bio;
+                        if (profileResult.profile.photo_url) {
+                            profilePhotoPreview.src = profileResult.profile.photo_url;
+                            profilePhotoPreview.hidden = false;
+                        }
+                    }
+                }
+
+                if (["developer", "wali_kelas"].includes(result.user.role)) {
+                    developerTools.hidden = false;
+                    await loadDeveloperMembers();
+                }
+
+                if (["developer", "wali_kelas"].includes(result.user.role)) {
+                    announcementTools.hidden = false;
+                    classContentTools.hidden = false;
+                    await loadAnnouncements(true);
+                    await loadClassContent();
+                }
+
+                await loadGallery(result.canManage || ["developer", "wali_kelas"].includes(result.user.role));
+            } catch (error) {
+                dashboardMessage.textContent = "Dashboard tidak dapat dimuat. Periksa koneksi server.";
+            }
+        }
+
+        async function loadClassContent() {
+            const response = await fetch("/api/auth/class-content");
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Konten kelas tidak dapat dimuat");
+            }
+            classContentForm.elements.title.value = result.info.title;
+            classContentForm.elements.content.value = result.info.content;
+            scheduleEditor.replaceChildren(...result.schedule.map((item) => {
+                const field = document.createElement("div");
+                field.className = "schedule-editor-row";
+                field.innerHTML = `<label></label><input type="text" required>`;
+                field.querySelector("label").textContent = item.day;
+                field.querySelector("input").value = item.subjects;
+                field.querySelector("input").dataset.day = item.day;
+                return field;
+            }));
+        }
+
+        async function loadAnnouncements(canManage) {
+            const response = await fetch("/api/auth/announcements");
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Pengumuman tidak dapat dimuat");
+            }
+
+            announcementList.replaceChildren(...result.announcements.map((announcement) => {
+                const item = document.createElement("article");
+                item.className = "announcement-item";
+                const heading = document.createElement("h3");
+                heading.textContent = announcement.title;
+                const content = document.createElement("p");
+                content.textContent = announcement.content;
+                item.append(heading, content);
+                if (announcement.image_url) {
+                    const poster = document.createElement("img");
+                    poster.src = announcement.image_url;
+                    poster.alt = `Poster ${announcement.title}`;
+                    item.append(poster);
+                }
+                const duration = document.createElement("small");
+                duration.textContent = announcement.expires_at
+                    ? `Berlaku sampai ${announcement.expires_at}`
+                    : "Berlaku sampai diubah manual";
+                item.append(duration);
+                if (canManage) {
+                    const deleteButton = document.createElement("button");
+                    deleteButton.type = "button";
+                    deleteButton.className = "gallery-delete";
+                    deleteButton.textContent = "Hapus";
+                    deleteButton.addEventListener("click", () => deleteAnnouncement(announcement.id));
+                    item.append(deleteButton);
+                }
+                return item;
+            }));
+        }
+
+        async function deleteAnnouncement(id) {
+            if (!window.confirm("Hapus pengumuman ini?")) return;
+            const response = await fetch(`/api/auth/announcements/${id}`, {
+                method: "DELETE",
+                credentials: "same-origin"
+            });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                announcementMessage.textContent = result.message || "Pengumuman gagal dihapus";
+                return;
+            }
+            await loadAnnouncements(true);
+        }
+
+        async function loadDeveloperMembers() {
+            const response = await fetch("/api/auth/developer/members", { credentials: "same-origin" });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Data anggota tidak dapat dimuat");
+            }
+
+            developerMembersList.replaceChildren(...result.members.map((member) => {
+                const card = document.createElement("article");
+                card.className = "developer-member-card";
+
+                const name = member.nama_lengkap || member.nama;
+                if (member.photo_url) {
+                    const photo = document.createElement("img");
+                    photo.className = "developer-member-photo";
+                    photo.src = member.photo_url;
+                    photo.alt = `Foto ${name}`;
+                    card.append(photo);
+                }
+                const heading = document.createElement("h3");
+                heading.textContent = name;
+                card.append(heading);
+
+                const account = document.createElement("p");
+                account.textContent = `@${member.username} | ${roleLabels[member.role] || "Anggota"} | ${member.kelas || "X TKJ"}`;
+                card.append(account);
+
+                const sessionInfo = document.createElement("p");
+                sessionInfo.className = "developer-session-info";
+                sessionInfo.textContent = `${member.active_sessions || 0} sesi aktif | Login terakhir: ${member.last_login_at || "Belum pernah"}`;
+                card.append(sessionInfo);
+
+                if (["developer", "wali_kelas"].includes(currentUserRole)) {
+                    const form = document.createElement("form");
+                    form.className = "reset-password-form";
+                    const passwordInput = document.createElement("input");
+                    passwordInput.type = "password";
+                    passwordInput.name = "password";
+                    passwordInput.placeholder = "Password baru (min. 6 karakter)";
+                    passwordInput.minLength = 6;
+                    passwordInput.required = true;
+                    const resetButton = document.createElement("button");
+                    resetButton.type = "submit";
+                    resetButton.className = "secondary-btn";
+                    resetButton.textContent = "Reset password";
+                    form.append(passwordInput, resetButton);
+                    form.addEventListener("submit", (event) => resetMemberPassword(event, member.id, passwordInput, resetButton));
+                    card.append(form);
+                }
+
+                const profileForm = document.createElement("form");
+                profileForm.className = "developer-profile-form";
+                profileForm.innerHTML = `
+                    <input name="nama_lengkap" type="text" placeholder="Nama lengkap" required>
+                    <input name="kelas" type="text" placeholder="Kelas" required>
+                    <input name="jabatan" type="text" placeholder="Label jabatan (opsional, contoh: Ketua Kelas)" maxlength="80">
+                    <textarea name="bio" rows="2" placeholder="Bio"></textarea>
+                    <button class="secondary-btn" type="submit">Simpan profil</button>
+                `;
+                profileForm.elements.nama_lengkap.value = member.nama_lengkap || member.nama;
+                profileForm.elements.kelas.value = member.kelas || "X TKJ";
+                profileForm.elements.jabatan.value = member.jabatan || "";
+                profileForm.elements.bio.value = member.bio || "";
+                if (currentUserRole === "developer") {
+                    const photoInput = document.createElement("input");
+                    photoInput.name = "foto";
+                    photoInput.type = "file";
+                    photoInput.accept = "image/jpeg,image/png,image/webp";
+                    profileForm.insertBefore(photoInput, profileForm.querySelector("button"));
+                }
+                profileForm.addEventListener("submit", (event) => updateMemberProfile(event, member.id, profileForm));
+                card.append(profileForm);
+
+                if (member.photo_url && ["developer", "wali_kelas"].includes(currentUserRole)) {
+                    const removePhotoButton = document.createElement("button");
+                    removePhotoButton.type = "button";
+                    removePhotoButton.className = "delete-account-button";
+                    removePhotoButton.textContent = "Hapus foto profil";
+                    removePhotoButton.addEventListener("click", () => deleteMemberPhoto(member.id));
+                    card.append(removePhotoButton);
+                }
+
+                if (currentUserRole === "developer") {
+                    const deleteButton = document.createElement("button");
+                    deleteButton.type = "button";
+                    deleteButton.className = "delete-account-button";
+                    deleteButton.textContent = "Hapus akun";
+                    deleteButton.addEventListener("click", () => deleteMemberAccount(member.id, name, deleteButton));
+                    card.append(deleteButton);
+                }
+
+                return card;
+            }));
+        }
+
+        async function resetMemberPassword(event, memberId, passwordInput, resetButton) {
+            event.preventDefault();
+            developerToolsMessage.textContent = "";
+            resetButton.disabled = true;
+            try {
+                const response = await fetch(`/api/auth/developer/members/${memberId}/reset-password`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "same-origin",
+                    body: JSON.stringify({ password: passwordInput.value })
+                });
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || "Password gagal diubah");
+                }
+                passwordInput.value = "";
+                developerToolsMessage.className = "form-message success-message";
+                developerToolsMessage.textContent = result.message;
+            } catch (error) {
+                developerToolsMessage.className = "form-message";
+                developerToolsMessage.textContent = error.message;
+            } finally {
+                resetButton.disabled = false;
+            }
+        }
+
+        async function updateMemberProfile(event, memberId, profileForm) {
+            event.preventDefault();
+            developerToolsMessage.textContent = "";
+            const formData = new FormData(profileForm);
+            const response = await fetch(`/api/auth/developer/members/${memberId}/profile`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                body: JSON.stringify({
+                    nama_lengkap: formData.get("nama_lengkap"),
+                    kelas: formData.get("kelas"),
+                    jabatan: formData.get("jabatan"),
+                    bio: formData.get("bio")
+                })
+            });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                developerToolsMessage.textContent = result.message || "Profil gagal diperbarui";
+                return;
+            }
+
+            const photo = formData.get("foto");
+            if (photo && photo.size > 0) {
+                const photoData = new FormData();
+                photoData.append("foto", photo);
+                const photoResponse = await fetch(`/api/auth/developer/members/${memberId}/profile/photo`, {
+                    method: "POST",
+                    credentials: "same-origin",
+                    body: photoData
+                });
+                const photoResult = await photoResponse.json();
+                if (!photoResponse.ok || !photoResult.success) {
+                    developerToolsMessage.textContent = photoResult.message || "Foto profil gagal diperbarui";
+                    return;
+                }
+            }
+            developerToolsMessage.className = "form-message success-message";
+            developerToolsMessage.textContent = "Profil anggota berhasil diperbarui";
+            await loadDeveloperMembers();
+        }
+
+        async function deleteMemberPhoto(memberId) {
+            if (!window.confirm("Hapus foto profil anggota ini?")) return;
+            const response = await fetch(`/api/auth/developer/members/${memberId}/profile/photo`, {
+                method: "DELETE",
+                credentials: "same-origin"
+            });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                developerToolsMessage.textContent = result.message || "Foto profil gagal dihapus";
+                return;
+            }
+            developerToolsMessage.className = "form-message success-message";
+            developerToolsMessage.textContent = result.message;
+            await loadDeveloperMembers();
+        }
+
+        async function deleteMemberAccount(memberId, name, deleteButton) {
+            if (!window.confirm(`Hapus akun ${name}? Profil, sesi, dan foto galeri akun ini juga akan dihapus.`)) return;
+            deleteButton.disabled = true;
+            developerToolsMessage.textContent = "";
+            try {
+                const response = await fetch(`/api/auth/developer/members/${memberId}`, {
+                    method: "DELETE",
+                    credentials: "same-origin"
+                });
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || "Akun gagal dihapus");
+                }
+                developerToolsMessage.className = "form-message success-message";
+                developerToolsMessage.textContent = result.message;
+                await loadDeveloperMembers();
+            } catch (error) {
+                developerToolsMessage.className = "form-message";
+                developerToolsMessage.textContent = error.message;
+                deleteButton.disabled = false;
+            }
+        }
+
+        logoutButton.addEventListener("click", async () => {
+            logoutButton.disabled = true;
+            try {
+                await fetch("/api/auth/logout", {
+                    method: "POST",
+                    credentials: "same-origin"
+                });
+            } finally {
+                window.location.href = "/";
+            }
+        });
+
+        async function loadGallery(canManage) {
+            const response = await fetch("/api/auth/gallery", { credentials: "same-origin" });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Galeri tidak dapat dimuat");
+            }
+            galleryAddToggle.hidden = !canManage;
+            galleryGrid.replaceChildren(...result.photos.map((photo) => {
+                const card = document.createElement("article");
+                card.className = "gallery-card";
+                card.innerHTML = `<img src="${photo.photo_url}" alt=""><div class="gallery-card-body"><h3></h3><p></p><small></small></div>`;
+                card.querySelector("h3").textContent = photo.title;
+                card.querySelector("p").textContent = photo.description;
+                card.querySelector("small").textContent = `Diunggah oleh ${photo.uploaded_by_name}`;
+                if (canManage) {
+                    const deleteButton = document.createElement("button");
+                    deleteButton.className = "gallery-delete";
+                    deleteButton.type = "button";
+                    deleteButton.textContent = "Hapus";
+                    deleteButton.addEventListener("click", () => deleteGalleryPhoto(photo.id));
+                    card.querySelector(".gallery-card-body").append(deleteButton);
+                }
+                return card;
+            }));
+            galleryEmpty.hidden = result.photos.length > 0;
+        }
+
+        async function deleteGalleryPhoto(id) {
+            if (!window.confirm("Hapus foto ini dari galeri?")) return;
+            const response = await fetch(`/api/auth/gallery/${id}`, { method: "DELETE", credentials: "same-origin" });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                galleryMessage.textContent = result.message || "Foto gagal dihapus";
+                return;
+            }
+            await loadGallery(true);
+        }
+
+        galleryAddToggle.addEventListener("click", () => {
+            galleryForm.hidden = !galleryForm.hidden;
+        });
+
+        galleryForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            galleryMessage.textContent = "";
+            const formData = new FormData(galleryForm);
+            const response = await fetch("/api/auth/gallery", {
+                method: "POST",
+                credentials: "same-origin",
+                body: formData
+            });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                galleryMessage.textContent = result.message || "Foto gagal ditambahkan";
+                return;
+            }
+            galleryForm.reset();
+            galleryForm.hidden = true;
+            galleryMessage.textContent = result.message;
+            await loadGallery(true);
+        });
+
+        announcementForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            announcementMessage.textContent = "";
+            const response = await fetch("/api/auth/announcements", {
+                method: "POST",
+                credentials: "same-origin",
+                body: new FormData(announcementForm)
+            });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                announcementMessage.textContent = result.message || "Pengumuman gagal ditambahkan";
+                return;
+            }
+            announcementForm.reset();
+            announcementMessage.className = "form-message success-message";
+            announcementMessage.textContent = result.message;
+            await loadAnnouncements(true);
+        });
+
+        classContentForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            classContentMessage.textContent = "";
+            const schedule = [...scheduleEditor.querySelectorAll("input")].map((input) => ({
+                day: input.dataset.day,
+                subjects: input.value
+            }));
+            const response = await fetch("/api/auth/class-content", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                body: JSON.stringify({
+                    title: classContentForm.elements.title.value,
+                    content: classContentForm.elements.content.value,
+                    schedule
+                })
+            });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                classContentMessage.textContent = result.message || "Konten kelas gagal diperbarui";
+                return;
+            }
+            classContentMessage.className = "form-message success-message";
+            classContentMessage.textContent = result.message;
+        });
+
+        profileForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            profileMessage.textContent = "";
+            const submitButton = profileForm.querySelector("button");
+            submitButton.disabled = true;
+
+            try {
+                const formData = new FormData(profileForm);
+                const response = await fetch("/api/auth/profile", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "same-origin",
+                    body: JSON.stringify(Object.fromEntries(formData.entries()))
+                });
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || "Profil gagal disimpan");
+                }
+
+                if (croppedPhoto || profilePhoto.files[0]) {
+                    const photoData = new FormData();
+                    photoData.append("foto", croppedPhoto || profilePhoto.files[0]);
+                    const photoResponse = await fetch("/api/auth/profile/photo", {
+                        method: "POST",
+                        credentials: "same-origin",
+                        body: photoData
+                    });
+                    const photoResult = await photoResponse.json();
+                    if (!photoResponse.ok || !photoResult.success) {
+                        throw new Error(photoResult.message || "Foto profil gagal disimpan");
+                    }
+                    profilePhotoPreview.src = photoResult.photo_url;
+                    profilePhotoPreview.hidden = false;
+                    profilePhoto.value = "";
+                    croppedPhoto = null;
+                }
+
+                profileMessage.classList.add("success-message");
+                profileMessage.textContent = result.message;
+                userName.textContent = result.profile.nama_lengkap;
+                subtitle.textContent = `Selamat datang, ${result.profile.nama_lengkap}`;
+            } catch (error) {
+                profileMessage.classList.remove("success-message");
+                profileMessage.textContent = error.message;
+            } finally {
+                submitButton.disabled = false;
+            }
+        });
+
+        loadDashboard();
+    </script>
+</body>
+</html>
