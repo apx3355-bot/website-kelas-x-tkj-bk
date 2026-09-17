@@ -1,6 +1,4 @@
 {
-  "buildCommand": "cd frontend && npm install && npm run build && cd .. && mkdir -p public && cp -r frontend/dist/* public/",
-  "outputDirectory": "public",
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
