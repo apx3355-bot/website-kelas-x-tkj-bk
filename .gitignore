@@ -4,6 +4,7 @@ frontend/dist/
 dist/
 .env
 .env.*
+!.env.example
 .DS_Store
 Thumbs.db
 storage/uploads/
